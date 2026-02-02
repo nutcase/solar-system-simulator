@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, DoubleSide, MathUtils, RingGeometry } from "three";
+import { TextureLoader, Mesh, DoubleSide, MathUtils, RingGeometry, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
 import { PLANET_VISUALS, SATURN_RING } from "@/lib/planet-data";
 import { ScenePosition } from "@/lib/orbital-mechanics/types";
@@ -22,6 +22,7 @@ export function Saturn({ position }: SaturnProps) {
   let bodyTexture;
   try {
     bodyTexture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
+    if (bodyTexture) bodyTexture.colorSpace = SRGBColorSpace;
   } catch {
     bodyTexture = null;
   }
@@ -29,6 +30,7 @@ export function Saturn({ position }: SaturnProps) {
   let ringTexture;
   try {
     ringTexture = useLoader(TextureLoader, `/textures/${SATURN_RING.textureFile}`);
+    if (ringTexture) ringTexture.colorSpace = SRGBColorSpace;
   } catch {
     ringTexture = null;
   }

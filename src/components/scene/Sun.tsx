@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, AdditiveBlending } from "three";
+import { TextureLoader, Mesh, AdditiveBlending, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
 import { SUN_VISUAL } from "@/lib/planet-data";
 import { useSimulationState } from "@/context/SimulationContext";
@@ -14,6 +14,7 @@ export function Sun() {
   let texture;
   try {
     texture = useLoader(TextureLoader, `/textures/${SUN_VISUAL.textureFile}`);
+    if (texture) texture.colorSpace = SRGBColorSpace;
   } catch {
     texture = null;
   }

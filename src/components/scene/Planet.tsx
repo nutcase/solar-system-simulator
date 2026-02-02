@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, MathUtils } from "three";
+import { TextureLoader, Mesh, MathUtils, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
 import { PlanetVisualData } from "@/lib/planet-data";
 import { ScenePosition } from "@/lib/orbital-mechanics/types";
@@ -23,6 +23,7 @@ export function Planet({ name, visual, position }: PlanetProps) {
   let texture;
   try {
     texture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
+    if (texture) texture.colorSpace = SRGBColorSpace;
   } catch {
     texture = null;
   }
