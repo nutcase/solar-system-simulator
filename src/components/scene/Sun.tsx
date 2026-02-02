@@ -11,13 +11,8 @@ export function Sun() {
   const meshRef = useRef<Mesh>(null);
   const { showLabels } = useSimulationState();
 
-  let texture;
-  try {
-    texture = useLoader(TextureLoader, `/textures/${SUN_VISUAL.textureFile}`);
-    if (texture) texture.colorSpace = SRGBColorSpace;
-  } catch {
-    texture = null;
-  }
+  const texture = useLoader(TextureLoader, `/textures/${SUN_VISUAL.textureFile}`);
+  texture.colorSpace = SRGBColorSpace;
 
   useFrame(() => {
     if (meshRef.current) {
@@ -42,11 +37,7 @@ export function Sun() {
       {/* Sun body */}
       <mesh ref={meshRef}>
         <sphereGeometry args={[SUN_VISUAL.radius, 64, 64]} />
-        {texture ? (
-          <meshBasicMaterial map={texture} />
-        ) : (
-          <meshBasicMaterial color={SUN_VISUAL.color} />
-        )}
+        <meshBasicMaterial map={texture} />
       </mesh>
 
       {/* Point light from center */}

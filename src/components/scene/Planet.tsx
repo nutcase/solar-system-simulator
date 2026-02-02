@@ -20,13 +20,8 @@ export function Planet({ name, visual, position }: PlanetProps) {
   const dispatch = useSimulationDispatch();
   const isSelected = selectedPlanet === name;
 
-  let texture;
-  try {
-    texture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
-    if (texture) texture.colorSpace = SRGBColorSpace;
-  } catch {
-    texture = null;
-  }
+  const texture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
+  texture.colorSpace = SRGBColorSpace;
 
   useFrame(() => {
     if (meshRef.current) {
@@ -47,11 +42,7 @@ export function Planet({ name, visual, position }: PlanetProps) {
         rotation={[MathUtils.degToRad(visual.axialTilt), 0, 0]}
       >
         <sphereGeometry args={[visual.radius, 32, 32]} />
-        {texture ? (
-          <meshStandardMaterial map={texture} />
-        ) : (
-          <meshStandardMaterial color={visual.color} />
-        )}
+        <meshStandardMaterial map={texture} />
       </mesh>
 
       {/* Selection indicator */}

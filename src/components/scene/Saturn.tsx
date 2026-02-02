@@ -19,21 +19,11 @@ export function Saturn({ position }: SaturnProps) {
   const dispatch = useSimulationDispatch();
   const isSelected = selectedPlanet === "saturn";
 
-  let bodyTexture;
-  try {
-    bodyTexture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
-    if (bodyTexture) bodyTexture.colorSpace = SRGBColorSpace;
-  } catch {
-    bodyTexture = null;
-  }
+  const bodyTexture = useLoader(TextureLoader, `/textures/${visual.textureFile}`);
+  bodyTexture.colorSpace = SRGBColorSpace;
 
-  let ringTexture;
-  try {
-    ringTexture = useLoader(TextureLoader, `/textures/${SATURN_RING.textureFile}`);
-    if (ringTexture) ringTexture.colorSpace = SRGBColorSpace;
-  } catch {
-    ringTexture = null;
-  }
+  const ringTexture = useLoader(TextureLoader, `/textures/${SATURN_RING.textureFile}`);
+  ringTexture.colorSpace = SRGBColorSpace;
 
   // Fix ring UVs so texture maps radially
   const ringGeo = useMemo(() => {
@@ -69,21 +59,13 @@ export function Saturn({ position }: SaturnProps) {
       {/* Saturn body */}
       <mesh ref={meshRef} onClick={handleClick} rotation={[tiltRad, 0, 0]}>
         <sphereGeometry args={[visual.radius, 32, 32]} />
-        {bodyTexture ? (
-          <meshStandardMaterial map={bodyTexture} />
-        ) : (
-          <meshStandardMaterial color={visual.color} />
-        )}
+        <meshStandardMaterial map={bodyTexture} />
       </mesh>
 
       {/* Ring */}
       <mesh rotation={[-Math.PI / 2 + tiltRad, 0, 0]} onClick={handleClick}>
         <primitive object={ringGeo} attach="geometry" />
-        {ringTexture ? (
-          <meshStandardMaterial map={ringTexture} side={DoubleSide} transparent opacity={0.85} />
-        ) : (
-          <meshStandardMaterial color="#d4b87a" side={DoubleSide} transparent opacity={0.5} />
-        )}
+        <meshStandardMaterial map={ringTexture} side={DoubleSide} transparent opacity={0.85} />
       </mesh>
 
       {isSelected && (
