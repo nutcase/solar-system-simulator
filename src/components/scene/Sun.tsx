@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, AdditiveBlending, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
-import { SUN_VISUAL } from "@/lib/planet-data";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { useRef } from "react";
+import { AdditiveBlending, type Mesh, SRGBColorSpace, TextureLoader } from "three";
 import { useSimulationState } from "@/context/SimulationContext";
+import { SUN_VISUAL } from "@/lib/planet-data";
 
 export function Sun() {
   const meshRef = useRef<Mesh>(null);
@@ -22,17 +22,18 @@ export function Sun() {
 
   return (
     <group>
-      {/* Sun glow */}
-      <mesh>
-        <sphereGeometry args={[SUN_VISUAL.radius * 1.4, 32, 32]} />
-        <meshBasicMaterial
-          color={SUN_VISUAL.color}
-          transparent
-          opacity={0.15}
-          blending={AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
+      <Billboard>
+        <mesh>
+          <planeGeometry args={[SUN_VISUAL.radius * 8, SUN_VISUAL.radius * 8]} />
+          <shaderMaterial
+            transparent
+            depthWrite={false}
+            blending={AdditiveBlending}
+            vertexShader={`varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`}
+            fragmentShader={`varying vec2 vUv; void main() { float r = length(vUv - 0.5); float glow = exp(-r * 9.0) * (1.0 - smoothstep(0.1, 0.5, r)); gl_FragColor = vec4(1.0, 0.42, 0.09, glow * 0.65); }`}
+          />
+        </mesh>
+      </Billboard>
 
       {/* Sun body */}
       <mesh ref={meshRef}>
@@ -42,7 +43,7 @@ export function Sun() {
 
       {/* Point light from center */}
       <pointLight color="#ffffff" intensity={2} distance={0} decay={0} />
-      <ambientLight intensity={0.06} />
+      <ambientLight intensity={0.14} />
 
       {showLabels && (
         <Billboard position={[0, SUN_VISUAL.radius + 0.6, 0]}>

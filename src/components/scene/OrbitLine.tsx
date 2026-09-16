@@ -1,11 +1,11 @@
 "use client";
 
+import { Line } from "@react-three/drei";
 import { useMemo } from "react";
 import { Vector3 } from "three";
-import { Line } from "@react-three/drei";
-import { computeOrbitPath, eclipticToScene, PlanetName } from "@/lib/orbital-mechanics";
-import { AU_TO_SCENE } from "@/lib/scale";
 import { useSimulationState } from "@/context/SimulationContext";
+import { computeOrbitPath, eclipticToScene, type PlanetName } from "@/lib/orbital-mechanics";
+import { AU_TO_SCENE } from "@/lib/scale";
 
 interface OrbitLineProps {
   planet: PlanetName;
@@ -25,5 +25,5 @@ export function OrbitLine({ planet, color }: OrbitLineProps) {
 
   if (!showOrbits) return null;
 
-  return <Line points={points} color={color} lineWidth={1.5} transparent opacity={0.5} />;
+  return <Line points={points} color={color} lineWidth={1} transparent opacity={0.26} />;
 }

@@ -1,12 +1,19 @@
 "use client";
 
-import { useRef, useMemo } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, DoubleSide, MathUtils, RingGeometry, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import {
+  DoubleSide,
+  MathUtils,
+  type Mesh,
+  RingGeometry,
+  SRGBColorSpace,
+  TextureLoader,
+} from "three";
+import { useSimulationDispatch, useSimulationState } from "@/context/SimulationContext";
+import type { ScenePosition } from "@/lib/orbital-mechanics/types";
 import { PLANET_VISUALS, SATURN_RING } from "@/lib/planet-data";
-import { ScenePosition } from "@/lib/orbital-mechanics/types";
-import { useSimulationState, useSimulationDispatch } from "@/context/SimulationContext";
 
 interface SaturnProps {
   position: ScenePosition;
@@ -68,14 +75,7 @@ export function Saturn({ position }: SaturnProps) {
         <meshStandardMaterial map={ringTexture} side={DoubleSide} transparent opacity={0.85} />
       </mesh>
 
-      {isSelected && (
-        <mesh>
-          <ringGeometry args={[visual.radius + 0.15, visual.radius + 0.2, 64]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
-        </mesh>
-      )}
-
-      {showLabels && (
+      {showLabels && !isSelected && (
         <Billboard position={[0, visual.radius + 0.5, 0]}>
           <Text fontSize={0.3} color={visual.color} anchorY="bottom">
             {visual.nameJa}

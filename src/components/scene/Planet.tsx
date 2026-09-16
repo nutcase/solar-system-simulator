@@ -1,12 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
-import { TextureLoader, Mesh, MathUtils, SRGBColorSpace } from "three";
 import { Billboard, Text } from "@react-three/drei";
-import { PlanetVisualData } from "@/lib/planet-data";
-import { ScenePosition } from "@/lib/orbital-mechanics/types";
-import { useSimulationState, useSimulationDispatch } from "@/context/SimulationContext";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { useRef } from "react";
+import { MathUtils, type Mesh, SRGBColorSpace, TextureLoader } from "three";
+import { useSimulationDispatch, useSimulationState } from "@/context/SimulationContext";
+import type { ScenePosition } from "@/lib/orbital-mechanics/types";
+import type { PlanetVisualData } from "@/lib/planet-data";
 
 interface PlanetProps {
   name: string;
@@ -46,14 +46,7 @@ export function Planet({ name, visual, position }: PlanetProps) {
       </mesh>
 
       {/* Selection indicator */}
-      {isSelected && (
-        <mesh>
-          <ringGeometry args={[visual.radius + 0.15, visual.radius + 0.2, 64]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
-        </mesh>
-      )}
-
-      {showLabels && (
+      {showLabels && !isSelected && (
         <Billboard position={[0, visual.radius + 0.35, 0]}>
           <Text fontSize={0.3} color={visual.color} anchorY="bottom">
             {visual.nameJa}

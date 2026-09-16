@@ -1,16 +1,16 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber";
-import { Sun } from "./Sun";
+import { useSimulationDispatch, useSimulationState } from "@/context/SimulationContext";
+import { usePlanetPositions } from "@/hooks/usePlanetPositions";
+import { PLANET_NAMES } from "@/lib/orbital-mechanics";
+import { PLANET_VISUALS } from "@/lib/planet-data";
+import { CameraController } from "./CameraController";
+import { OrbitLine } from "./OrbitLine";
 import { Planet } from "./Planet";
 import { Saturn } from "./Saturn";
-import { OrbitLine } from "./OrbitLine";
 import { Starfield } from "./Starfield";
-import { CameraController } from "./CameraController";
-import { PLANET_VISUALS } from "@/lib/planet-data";
-import { PLANET_NAMES, PlanetName } from "@/lib/orbital-mechanics";
-import { usePlanetPositions } from "@/hooks/usePlanetPositions";
-import { useSimulationState, useSimulationDispatch } from "@/context/SimulationContext";
+import { Sun } from "./Sun";
 
 export function SolarSystemScene() {
   const { date } = useSimulationState();
@@ -26,7 +26,7 @@ export function SolarSystemScene() {
 
   return (
     <>
-      <CameraController />
+      <CameraController positions={positions} />
       <Starfield />
       <Sun />
 
